@@ -11,6 +11,18 @@ static PKG_NAME: &str = env!("CARGO_PKG_NAME");
 static LEXER_SEPARATOR: [char; 5] = [' ', ',', '\n', '\t', ';'];
 static LEXER_SKIP: [&'static str; 5] = ["", ",", ";", "\n", "\t"];
 
+#[derive(Debug, PartialEq)]
+enum SqlStatement {
+    Select,
+    Insert,
+    Update,
+    Delete,
+    Create,
+    Drop,
+    Alter,
+    Unknown,
+}
+
 fn lex_file(file_name: &str) -> Vec<String> {
     // NOTE no analysis for now
     let file: String = fs::read_to_string(file_name).expect("Unable to parse '{file_name}'");
@@ -26,6 +38,21 @@ fn lex_file(file_name: &str) -> Vec<String> {
         .filter(|token| LEXER_SKIP.contains(&token.as_str()) == false)
         .cloned()
         .collect()
+}
+
+fn get_statement_type(tokens: &Vec<String>) -> SqlStatement {
+    let statement_type = match tokens[0].as_str() {
+        "select" => SqlStatement::Select,
+        "insert" => SqlStatement::Insert,
+        "update" => SqlStatement::Update,
+        "delete" => SqlStatement::Delete,
+        "create" => SqlStatement::Create,
+        "drop" => SqlStatement::Drop,
+        "alter" => SqlStatement::Alter,
+        _ => SqlStatement::Unknown,
+    };
+
+    statement_type
 }
 
 fn main() {
@@ -58,11 +85,8 @@ mod tests {
                 "from",
                 "video_games"
             ]
-        )
+        );
 
-        // match db.get("apple".to_string()) {
-        //     Ok(value) => assert_eq!(value, "125"),
-        //     Err(e) => assert_eq!(e.kind(), ErrorKind::NotFound),
-        // }
+        assert_eq!(get_statement_type(&tokens_with_cols), SqlStatement::Select);
     }
 }
