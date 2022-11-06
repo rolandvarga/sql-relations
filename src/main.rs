@@ -5,8 +5,6 @@ extern crate pretty_env_logger;
 #[macro_use]
 extern crate log;
 
-mod parsing;
-
 static VERSION: &str = env!("CARGO_PKG_VERSION");
 static PKG_NAME: &str = env!("CARGO_PKG_NAME");
 
@@ -47,11 +45,19 @@ mod tests {
 
     #[test]
     fn test_lex_with_cols() {
-        let lexed = lex_file("src/test/data/select_with_cols.sql");
+        let tokens_with_cols = lex_file("src/test/data/select_with_cols.sql");
 
         assert_eq!(
-            lexed,
-            vec!["select", "*", "apples", "oranges", "nuts", "from", "fruits"]
+            tokens_with_cols,
+            vec![
+                "select",
+                "*",
+                "title",
+                "platforms",
+                "released",
+                "from",
+                "video_games"
+            ]
         )
 
         // match db.get("apple".to_string()) {

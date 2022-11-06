@@ -1,5 +1,5 @@
 SELECT  *,
-        apples,
-        oranges,
-        nuts 
-FROM fruits;
+        title,
+        platforms,
+        released
+FROM video_games;
