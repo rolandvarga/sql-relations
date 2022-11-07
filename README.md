@@ -12,5 +12,5 @@ INFO  sql_relations >
 ```
 
 #### TODO
-[ ] handle CTEs
-[ ] support multiple statements per file
+- handle CTEs
+- support multiple statements per file
